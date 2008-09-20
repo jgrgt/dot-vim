@@ -92,9 +92,9 @@ autocmd BufRead,BufNewFile *.pl set tabstop=4 expandtab shiftwidth=4
 
 " Remap and restyle omni completion
 :set completeopt=longest,menuone
-":inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
-":inoremap <expr> <c-n> pumvisible() ? "\<lt>c-n>" : "\<lt>c-n>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
-":inoremap <expr> <m-;> pumvisible() ? "\<lt>c-n>" : "\<lt>c-x>\<lt>c-o>\<lt>c-n>\<lt>c-p>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
 
 " Set other default completion for supertab
 let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
+
+" from http://blog.sontek.net/2008/05/11/python-with-a-modular-ide-vim/
+autocmd FileType python set omnifunc=pythoncomplete#Complete
