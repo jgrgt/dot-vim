@@ -2,6 +2,7 @@ python << EOF
 import vim
 import re
 import itertools
+import compiler
 
 def SetBreakpoint():
     nLine = int( vim.eval( 'line(".")'))
@@ -57,14 +58,34 @@ def generate_argnames(f):
 def GenerateDocstring():
     # Requires a selection
     buf = vim.current.buffer
+    #x = compile('\n'.join(vim.current.range)+"\n    pass",'','exec')
     sel_start, col = buf.mark("<")
     sel_stop, col = buf.mark(">")
 
-    f_def = buf[(sel_start-1):sel_stop]
-    empty_f = "\n".join(f_def)
+    empty_f = "\n".join(vim.current.range)
 
-    argnames = generate_argnames(empty_f)
-    whitespace = re.search( '^(\s*)', buf[sel_start-1]).group(1)
+    whitespace = re.search( '^(\s*)', vim.current.range[0]).group(1)
+    # Search for a docstring
+    marker = None
+    for m in ('"""', "'''"):
+        if '"""' in buf[sel_stop]:
+            marker = '"""'
+    if marker:
+        # Find the docstring end
+        if buf[sel_stop].count(marker) > 1:
+            docstring = buf[sel_stop]
+        else:
+            # Search for max 100 lines for the end of the docstring
+            for x in range(1, 100):
+                end = sel_stop + x
+                if marker in buf[end]:
+                    docstring = "\n".join(buf[sel_stop:end])
+                    break
+            docstring = ""
+        empty_f = "%s\n%s" % (empty_f, docstring)
+    # Add pass
+    # TODO
+
     lines = ['%s    """' % (whitespace)]
     for argname in argnames:
 	lines.append("%s    @param %s: " % (whitespace, argname))
