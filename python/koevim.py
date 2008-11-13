@@ -5,7 +5,10 @@ from collections import defaultdict
 
 indentre = re.compile("^([ ]*)[^ ]")
 def getIndent(line):
-    return indentre.match(line).group(1)
+    match = indentre.match(line)
+    if match:
+        return match.group(1)
+    return ""
 
 class Visitor:
     def __init__(self):
@@ -33,18 +36,14 @@ class DocString(object):
     rtypere = re.compile("^@rtype[ ]?:[ ]*(.*)$")
     returnarg = "___return"
 
-    def __init__(self, docstring, args, kwargs, defaults):
+    def __init__(self, doclines, args, kwargs, defaults, marker):
         self.argdict = defaultdict(Argument)
-        self.docstring = docstring
+        self.doclines = doclines
         self.args = args
         self.kwargs = kwargs
         self.defaults = defaults
-        self.getIndent()
+        self.marker = marker
         self.parse()
-
-    def getIndent(self):
-        first = self.docstring.splitlines()[0]
-        self.indent = getIndent(first)
 
     def parse(self):
         before = list()
@@ -54,9 +53,8 @@ class DocString(object):
         BEFORE, ATLINES = range(1, 3)
         state = BEFORE
 
-        for line in self.docstring.splitlines():
-            sline = line.lstrip()
-            isparamline = self.isParamLine(sline)
+        for line in self.doclines:
+            isparamline = self.isParamLine(line)
             if state == BEFORE:
                 if not isparamline:
                     before.append(line)
@@ -108,14 +106,22 @@ class DocString(object):
             ret.append("@type %s: %s" % (arg, self.argdict[arg].type or ''))
         ret.append("@return: %s" % self.argdict[self.returnarg].param or '')
         ret.append("@rtype: %s" % self.argdict[self.returnarg].type or '')
-        return ["%s%s" % (self.indent, x) for x in ret]
+        return ret
 
     def getLines(self):
-        ret = list()
-        ret.extend(self.before)
+        ret = IndentedLines(self.before, self.doclines.indentation)
         ret.extend(self.getAtLines())
         ret.extend(self.after)
-        return ret
+        if not ret[0].strip():
+            ret[0] = self.marker
+        else:
+            ret.insert(0, self.marker)
+
+        if not ret[-1].strip():
+            ret[-1] = self.marker
+        else:
+            ret.append(self.marker)
+        return ret.getIndentedLines()
 
 class IndentedLines(list):
     def __init__(self, lines, indentation=None):
@@ -123,9 +129,13 @@ class IndentedLines(list):
         self.indentation = indentation or ""
 
     def toString(self, indentation=None):
+        return "\n".join(self.getIndentedLines(indentation))
+
+    def getIndentedLines(self, indentation=None):
         if indentation is None:
             indentation = self.indentation
-        return "\n".join("%s%s" % (indentation, line) for line in self)
+        return ["%s%s" % (indentation, line) for line in self]
+
 
 class AutoIndentedLines(IndentedLines):
     def __init__(self, lines):
@@ -133,12 +143,21 @@ class AutoIndentedLines(IndentedLines):
             indent = ""
             cleanedLines = lines
         else:
-            indent = getIndent(lines[0])
+            indent = ""
+            for line in lines:
+                if line.strip():
+                    indent = getIndent(line)
+                    break
+
             l = len(indent)
+
             def clean(line):
                 # No regex, happy now, ikke?
                 if line[:l] == indent:
-                    return line[l:]
+                    return line[l:] or "" # If line is only indentation, line[:l] returns None
+                else:
+                    return line
+
             cleanedLines = [clean(line) for line in lines]
 
         IndentedLines.__init__(self, cleanedLines, indent)
@@ -157,6 +176,7 @@ def GenerateDocString(buf, selected, sel_start, sel_stop):
         # Find the docstring end
         if buf[sel_stop].count(marker) > 1:
             doc = AutoIndentedLines([buf[sel_stop]])
+            docstring_end = docstring_begin + 1
         else:
             # Search for max 100 lines for the end of the docstring
             for x in range(1, 100):
@@ -167,7 +187,10 @@ def GenerateDocString(buf, selected, sel_start, sel_stop):
                     docstring_end = end + 1
                     break
     else:
-        doc = AutoIndentedLines(list())
+        marker = '"""'
+        defaultDoc = ['"""', 'Short description here', '"""']
+        indentation = "%s    " % fundef.indentation
+        doc = IndentedLines(defaultDoc, indentation=indentation)
     # Add pass
     # Warning: won't work with tab-indentation TODO
     indentation = doc.indentation
@@ -181,13 +204,24 @@ def GenerateDocString(buf, selected, sel_start, sel_stop):
     v = Visitor()
     compiler.walk(ast, v)
     info = v.info
+    cleandoc = AutoIndentedLines(info['doc'].splitlines())
+    cleandoc.indentation = doc.indentation
 
-    # .toString(): temp hack
-    buf[docstring_begin:docstring_end] = DocString(doc.toString(), info['argnames'], info['kwargnames'], info['defaults']).getLines()
+    # Filter out self:
+    argnames = info['argnames']
+    if argnames[0] == 'self':
+        argnames = argnames[1:]
+
+    buf[docstring_begin:docstring_end] = DocString(cleandoc, argnames, info['kwargnames'], info['defaults'], marker).getLines()
 
 
 if __name__ == "__main__":
-    buffer = ['    def foo(bar, nieuw, baz=None):',
+    def generate(buffer):
+        GenerateDocString(buffer, [buffer[0]], 0, 1)
+
+        print "\n".join(buffer)
+
+    buffer1 = ['    def foo(bar, nieuw, baz=None):',
         '        """',
         '        dit is ervoor',
         '',
@@ -200,9 +234,22 @@ if __name__ == "__main__":
         '',
         '        en erna',
         '        """',
-        '        pass'
+        '        return True'
     ]
-    GenerateDocString(buffer, [buffer[0]], 0, 1)
 
-    print "\n".join(buffer)
+    generate(buffer1)
 
+    buffer2 = [
+        'def spam(self):',
+        '    return False',
+    ]
+
+    generate(buffer2)
+
+    buffer3 = [
+        'def eggs(self, white, yolk):',
+        '    """This is a oneline docstring"""',
+        '    return False',
+    ]
+
+    generate(buffer3)
