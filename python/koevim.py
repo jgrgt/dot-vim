@@ -2,6 +2,7 @@ import re
 import itertools
 import compiler
 from collections import defaultdict
+import functools
 
 indentre = re.compile("^([ ]*)[^ ]")
 def getIndent(line):
@@ -109,7 +110,7 @@ class DocString(object):
         return ret
 
     def getLines(self):
-        ret = IndentedLines(self.before, self.doclines.indentation)
+        ret = WhitespaceFilter(IndentedLines(self.before, self.doclines.indentation))
         ret.extend(self.getAtLines())
         ret.extend(self.after)
         if not ret[0].strip():
@@ -136,6 +137,19 @@ class IndentedLines(list):
             indentation = self.indentation
         return ["%s%s" % (indentation, line) for line in self]
 
+def WhitespaceFilter(indentedLines):
+    """
+    Attempt at the decorator pattern.
+
+    Not quite like it should be.
+    """
+    func = indentedLines.getIndentedLines
+    @functools.wraps(func)
+    def decorator(*args, **kwargs):
+        return [line.rstrip() for line in func(*args, **kwargs)]
+
+    indentedLines.getIndentedLines = decorator
+    return indentedLines
 
 class AutoIndentedLines(IndentedLines):
     def __init__(self, lines):
