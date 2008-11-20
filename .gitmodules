@@ -1,0 +1,3 @@
+[submodule "plugin/nerdcommenter"]
+	path = plugin/nerdcommenter
+	url = git://github.com/scrooloose/nerdcommenter.git
