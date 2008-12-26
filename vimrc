@@ -91,10 +91,12 @@ autocmd BufRead,BufNewFile *.pl set ai
 autocmd BufRead,BufNewFile *.pl set tabstop=4 expandtab shiftwidth=4
 
 " Remap and restyle omni completion
-:set completeopt=longest,menuone
+":set completeopt=longest,menuone
 
 " Set other default completion for supertab
 let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
 
 " from http://blog.sontek.net/2008/05/11/python-with-a-modular-ide-vim/
-autocmd FileType python set omnifunc=pythoncomplete#Complete
+"autocmd FileType python set omnifunc=pythoncomplete#Complete
+
+autocmd FileType python setlocal omnifunc=pysmell#Complete
