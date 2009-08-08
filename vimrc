@@ -84,19 +84,35 @@ endif " has("autocmd")
 
 autocmd BufRead,BufNewFile *.py syntax on
 autocmd BufRead,BufNewFile *.py set ai
-autocmd BufRead,BufNewFile *.py set tabstop=4 expandtab shiftwidth=4
+autocmd BufRead,BufNewFile *.py set tabstop=4 expandtab shiftwidth=4 
+autocmd BufRead,BufNewFile *.py set iskeyword=@,48-57,_,192-255
+
+autocmd BufRead,BufNewFile *.qshell syntax on
+autocmd BufRead,BufNewFile *.qshell set ai
+autocmd BufRead,BufNewFile *.qshell set tabstop=4 expandtab shiftwidth=4
 
 autocmd BufRead,BufNewFile *.pl syntax on
 autocmd BufRead,BufNewFile *.pl set ai
 autocmd BufRead,BufNewFile *.pl set tabstop=4 expandtab shiftwidth=4
 
+autocmd BufNewFile,BufRead *.yaml,*.yml syntax on
+autocmd BufNewFile,BufRead *.yaml,*.yml set ai
+autocmd BufNewFile,BufRead *.yaml,*.yml set tabstop=2 expandtab shiftwidth=2
+autocmd BufNewFile,BufRead *.yaml,*.yml so ~/.vim/syntax/yaml.vim
+
 " Remap and restyle omni completion
 ":set completeopt=longest,menuone
 
 " Set other default completion for supertab
-let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
+"let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
+let g:SuperTabDefaultCompletionType = "<C-X><C-N>"
 
 " from http://blog.sontek.net/2008/05/11/python-with-a-modular-ide-vim/
 "autocmd FileType python set omnifunc=pythoncomplete#Complete
 
-autocmd FileType python setlocal omnifunc=pysmell#Complete
+"autocmd FileType python setlocal omnifunc=pysmell#Complete
+if has("autocmd")
+  "autocmd FileType python set complete+=kC:/path/to/pydiction iskeyword+=.,(
+  filetype on
+  filetype plugin on
+endif " has("autocmd")
