@@ -100,6 +100,8 @@ autocmd BufNewFile,BufRead *.yaml,*.yml set ai
 autocmd BufNewFile,BufRead *.yaml,*.yml set tabstop=2 expandtab shiftwidth=2
 autocmd BufNewFile,BufRead *.yaml,*.yml so ~/.vim/syntax/yaml.vim
 
+autocmd BufRead,BufNewFile *.egg setfiletype none
+
 " Remap and restyle omni completion
 ":set completeopt=longest,menuone
 
