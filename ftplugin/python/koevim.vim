@@ -1,3 +1,8 @@
+if exists("b:loaded_py_ftplugin_koevim")
+  finish
+endif
+let b:loaded_py_ftplugin_koevim = 1
+
 python << EOF
 import vim
 
