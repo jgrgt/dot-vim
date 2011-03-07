@@ -74,7 +74,7 @@ if has("autocmd")
 
   augroup END
 
-  autocmd FileType python set complete+=k/path/to/pydiction isk+=.,( 
+  "autocmd FileType python set complete+=k/path/to/pydiction isk+=.,( 
 
 else
 
@@ -82,14 +82,12 @@ else
 
 endif " has("autocmd")
 
-autocmd BufRead,BufNewFile *.py syntax on
-autocmd BufRead,BufNewFile *.py set ai
-autocmd BufRead,BufNewFile *.py set tabstop=4 expandtab shiftwidth=4 
-autocmd BufRead,BufNewFile *.py set iskeyword=@,48-57,_,192-255
+" Remap and restyle omni completion
+":set completeopt=longest,menuone
 
-autocmd BufRead,BufNewFile *.qshell syntax on
-autocmd BufRead,BufNewFile *.qshell set ai
-autocmd BufRead,BufNewFile *.qshell set tabstop=4 expandtab shiftwidth=4
+" Set other default completion for supertab
+"let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
+let g:SuperTabDefaultCompletionType = "<C-X><C-N>"
 
 autocmd BufRead,BufNewFile *.pl syntax on
 autocmd BufRead,BufNewFile *.pl set ai
@@ -101,20 +99,41 @@ autocmd BufNewFile,BufRead *.yaml,*.yml set tabstop=2 expandtab shiftwidth=2
 autocmd BufNewFile,BufRead *.yaml,*.yml so ~/.vim/syntax/yaml.vim
 
 autocmd BufRead,BufNewFile *.egg setfiletype none
+autocmd BufRead,BufNewFile *.script set filetype=python
+autocmd BufRead,BufNewFile *.qshell set filetype=python
 
-" Remap and restyle omni completion
-":set completeopt=longest,menuone
-
-" Set other default completion for supertab
-"let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
-let g:SuperTabDefaultCompletionType = "<C-X><C-N>"
+autocmd FileType python syntax on
+autocmd FileType python setlocal ai
+autocmd FileType python setlocal tabstop=4 expandtab shiftwidth=4 
+autocmd FileType python setlocal iskeyword=@,48-57,_,192-255
 
 " from http://blog.sontek.net/2008/05/11/python-with-a-modular-ide-vim/
 "autocmd FileType python set omnifunc=pythoncomplete#Complete
-
 "autocmd FileType python setlocal omnifunc=pysmell#Complete
+"
 if has("autocmd")
   "autocmd FileType python set complete+=kC:/path/to/pydiction iskeyword+=.,(
   filetype on
   filetype plugin on
 endif " has("autocmd")
+
+set gfn=Inconsolata
+
+function! JavaScriptFold() 
+    setl foldmethod=syntax
+    setl foldlevelstart=1
+    syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
+
+    function! FoldText()
+        return substitute(getline(v:foldstart), '{.*', '{...}', '')
+    endfunction
+    setl foldtext=FoldText()
+endfunction
+
+au FileType javascript call JavaScriptFold()
+au FileType javascript setl fen
+au BufReadCmd *.docx,*.xlsx,*.pptx call zip#Browse(expand("<amatch>"))
+au BufReadCmd *.odt,*.ott,*.ods,*.ots,*.odp,*.otp,*.odg,*.otg call zip#Browse(expand("<amatch>"))
+
+" Ctags map
+map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
