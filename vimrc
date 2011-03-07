@@ -98,15 +98,6 @@ autocmd BufNewFile,BufRead *.yaml,*.yml set ai
 autocmd BufNewFile,BufRead *.yaml,*.yml set tabstop=2 expandtab shiftwidth=2
 autocmd BufNewFile,BufRead *.yaml,*.yml so ~/.vim/syntax/yaml.vim
 
-autocmd BufRead,BufNewFile *.egg setfiletype none
-autocmd BufRead,BufNewFile *.script set filetype=python
-autocmd BufRead,BufNewFile *.qshell set filetype=python
-
-autocmd FileType python syntax on
-autocmd FileType python setlocal ai
-autocmd FileType python setlocal tabstop=4 expandtab shiftwidth=4 
-autocmd FileType python setlocal iskeyword=@,48-57,_,192-255
-
 " from http://blog.sontek.net/2008/05/11/python-with-a-modular-ide-vim/
 "autocmd FileType python set omnifunc=pythoncomplete#Complete
 "autocmd FileType python setlocal omnifunc=pysmell#Complete
@@ -119,19 +110,7 @@ endif " has("autocmd")
 
 set gfn=Inconsolata
 
-function! JavaScriptFold() 
-    setl foldmethod=syntax
-    setl foldlevelstart=1
-    syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
-
-    function! FoldText()
-        return substitute(getline(v:foldstart), '{.*', '{...}', '')
-    endfunction
-    setl foldtext=FoldText()
-endfunction
-
-au FileType javascript call JavaScriptFold()
-au FileType javascript setl fen
+" Office document magic
 au BufReadCmd *.docx,*.xlsx,*.pptx call zip#Browse(expand("<amatch>"))
 au BufReadCmd *.odt,*.ott,*.ods,*.ots,*.odp,*.otp,*.odg,*.otg call zip#Browse(expand("<amatch>"))
 
