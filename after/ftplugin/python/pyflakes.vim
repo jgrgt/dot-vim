@@ -29,43 +29,45 @@ import sys
 
 # get the directory this script is in: the pyflakes python module should be installed there.
 scriptdir = os.path.join(os.path.dirname(vim.eval('expand("<sfile>")')), 'pyflakes')
+print scriptdir
 sys.path.insert(0, scriptdir)
 
-from pyflakes import checker, ast, messages
+from pyflakes import checker, messages
+print "imported"
 from operator import attrgetter
 
-class SyntaxError(messages.Message):
+class SyntaxErrorMessage(messages.Message):
     message = 'could not compile: %s'
     def __init__(self, filename, lineno, col, message):
-        messages.Message.__init__(self, filename, lineno, col)
+        messages.Message.__init__(self, filename, lineno)#, col)
         self.message_args = (message,)
 
 def check(buffer):
     filename = buffer.name
     contents = '\n'.join(buffer[:])
 
-    builtins = []
     try:
-        builtins = eval(vim.eval('string(g:pyflakes_builtins)'))
-    except Exception:
-        pass
-
-    try:
-        tree = ast.parse(contents, filename)
-    except:
         try:
-            value = sys.exc_info()[1]
-            lineno, offset, line = value[1][1:]
-        except IndexError:
-            lineno, offset, line = 1, 0, ''
-        if line.endswith("\n"):
-            line = line[:-1]
-
-        return [SyntaxError(filename, lineno, offset, str(value))]
+            compile(contents, filename, "exec")
+        except MemoryError:
+            # Python 2.4 will raise MemoryError if the source can't be
+            # decoded.
+            if sys.version_info[:2] == (2, 4):
+                raise SyntaxError(None)
+            raise
+    except (SyntaxError, IndentationError), value:
+        msg = value.args[0]
+        (lineno, offset, text) = value.lineno, value.offset, value.text
+	return [SyntaxErrorMessage(filename, lineno, offset, str(value))]
     else:
-        w = checker.Checker(tree, filename, builtins = builtins)
-        w.messages.sort(key = attrgetter('lineno'))
+        import compiler
+        tree = compiler.parse(contents)
+        w = checker.Checker(tree, filename)
+        w.messages.sort(lambda a, b: cmp(a.lineno, b.lineno))
+        for warning in w.messages:
+            print warning
         return w.messages
+
 
 
 def vim_quote(s):
