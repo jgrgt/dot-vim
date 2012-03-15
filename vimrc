@@ -116,3 +116,28 @@ au BufReadCmd *.odt,*.ott,*.ods,*.ots,*.odp,*.otp,*.odg,*.otg call zip#Browse(ex
 
 " Ctags map
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+set textwidth=80
+
+nnoremap <Leader>H :call<SID>LongLineHLToggle()<cr>
+hi OverLength ctermbg=none cterm=none
+match OverLength /\%>80v/
+fun! s:LongLineHLToggle()
+ if !exists('w:longlinehl')
+  let w:longlinehl = matchadd('ErrorMsg', '.\%>80v', 0)
+  echo "Long lines highlighted"
+ else
+  call matchdelete(w:longlinehl)
+  unl w:longlinehl
+  echo "Long lines unhighlighted"
+ endif
+endfunction
+
+" Pathogen initialization
+call pathogen#infect()
+
+set list
+set listchars=tab:>.,trail:.,extends:#,nbsp:.
+
+" For saving root files when not root
+" http://nvie.com/posts/how-i-boosted-my-vim/
+cmap w!! w !sudo tee % >/dev/null
