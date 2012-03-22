@@ -14,6 +14,9 @@ if v:progname =~? "evim"
   finish
 endif
 
+" Pathogen initialization
+call pathogen#infect()
+
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
 set nocompatible
@@ -46,6 +49,13 @@ map Q gq
 if &t_Co > 2 || has("gui_running")
   syntax on
   set hlsearch
+  " Solarized http://ethanschoonover.com/solarized/vim-colors-solarized
+  set background=light
+  colorscheme solarized
+else
+  " Solarized http://ethanschoonover.com/solarized/vim-colors-solarized
+  set background=dark
+  colorscheme solarized
 endif
 
 " Only do this part when compiled with support for autocommands.
@@ -131,9 +141,6 @@ fun! s:LongLineHLToggle()
   echo "Long lines unhighlighted"
  endif
 endfunction
-
-" Pathogen initialization
-call pathogen#infect()
 
 set list
 set listchars=tab:>.,trail:.,extends:#,nbsp:.
