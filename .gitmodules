@@ -37,12 +37,12 @@
 [submodule "bundle/syntastic"]
 	path = bundle/syntastic
 	url = git://github.com/scrooloose/syntastic.git
-[submodule "vim-smartinput"]
-	path = vim-smartinput
-	url = git://github.com/kana/vim-smartinput.git
 [submodule "bundle/snipmate"]
 	path = bundle/snipmate
 	url = git://github.com/msanders/snipmate.vim.git
 [submodule "bundle/sparkup"]
 	path = bundle/sparkup
 	url = git://github.com/rstacruz/sparkup.git
+[submodule "bundle/vim-smartinput"]
+	path = bundle/vim-smartinput
+	url = git://github.com/kana/vim-smartinput.git
