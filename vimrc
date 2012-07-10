@@ -155,6 +155,56 @@ set listchars=tab:>.,trail:.,extends:#,nbsp:.
 cmap w!! w !sudo tee % >/dev/null
 
 set undofile
-set colorcolumn=85
 nnoremap j gj
 nnoremap k gk
+
+set modelines=0
+set encoding=utf-8
+set scrolloff=3
+set showmode
+set showcmd
+"set hidden
+set wildmenu
+set wildmode=list:longest
+set visualbell
+set cursorline
+set ttyfast
+set backspace=indent,eol,start
+set laststatus=2
+
+"let mapleader = ","
+
+" Don't use stupid \1 stuff in regexes
+nnoremap / /\v
+vnoremap / /\v
+set ignorecase
+set smartcase
+set gdefault " always /g
+set incsearch
+set showmatch
+set hlsearch
+" Use to clear search highlight
+nnoremap <leader><space> :noh<cr>
+
+set wrap
+set textwidth=79
+set formatoptions=qrn1
+set colorcolumn=85
+
+" strip all trailing whitespace in the current file
+nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
+
+" HTML: fold tag
+nnoremap <leader>ft Vatzf
+
+" re-hardwrap paragraphs of text
+nnoremap <leader>q gqip
+
+" reselect just pasted text
+nnoremap <leader>v V`]
+
+" go from insert mode to normal mode with 'jj'
+inoremap jj <ESC>
+
+" For ack
+let g:ackprg="ack-grep -H --nocolor --nogroup --column"
