@@ -10,9 +10,6 @@
 [submodule "bundle/ack"]
 	path = bundle/ack
 	url = git://github.com/mileszs/ack.vim.git
-[submodule "snipmate"]
-	path = snipmate
-	url = git://github.com/msanders/snipmate.vim.git
 [submodule "sparkup"]
 	path = sparkup
 	url = git://github.com/rstacruz/sparkup.git
@@ -46,3 +43,6 @@
 [submodule "vim-smartinput"]
 	path = vim-smartinput
 	url = git://github.com/kana/vim-smartinput.git
+[submodule "bundle/snipmate"]
+	path = bundle/snipmate
+	url = git://github.com/msanders/snipmate.vim.git
