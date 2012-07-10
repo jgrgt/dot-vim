@@ -16,6 +16,7 @@ endif
 
 " Pathogen initialization
 call pathogen#infect()
+se t_Co=256
 
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
@@ -46,15 +47,19 @@ map Q gq
 
 " Switch syntax highlighting on, when the terminal has colors
 " Also switch on highlighting the last used search pattern.
-if &t_Co > 2 || has("gui_running")
+if has("gui_running")
   syntax on
   set hlsearch
   " Solarized http://ethanschoonover.com/solarized/vim-colors-solarized
   set background=light
+  " let g:solarized_termcolors=16
   colorscheme solarized
 else
+  syntax on
+  set hlsearch
   " Solarized http://ethanschoonover.com/solarized/vim-colors-solarized
   set background=dark
+  let g:solarized_termcolors=256
   colorscheme solarized
 endif
 
@@ -148,3 +153,8 @@ set listchars=tab:>.,trail:.,extends:#,nbsp:.
 " For saving root files when not root
 " http://nvie.com/posts/how-i-boosted-my-vim/
 cmap w!! w !sudo tee % >/dev/null
+
+set undofile
+set colorcolumn=85
+nnoremap j gj
+nnoremap k gk
