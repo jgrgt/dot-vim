@@ -31,3 +31,6 @@
 [submodule "bundle/linediff"]
 	path = bundle/linediff
 	url = git://github.com/AndrewRadev/linediff.vim.git
+[submodule "bundle/vim-nosecompiler"]
+	path = bundle/vim-nosecompiler
+	url = git://github.com/olethanh/Vim-nosecompiler.git
