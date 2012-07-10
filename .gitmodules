@@ -16,3 +16,6 @@
 [submodule "sparkup"]
 	path = sparkup
 	url = git://github.com/rstacruz/sparkup.git
+[submodule "bundle/slime"]
+	path = bundle/slime
+	url = git://github.com/jpalardy/vim-slime.git
