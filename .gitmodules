@@ -49,3 +49,6 @@
 [submodule "bundle/splice"]
 	path = bundle/splice
 	url = https://github.com/sjl/splice.vim.git
+[submodule "bundle/python-mode"]
+	path = bundle/python-mode
+	url = git://github.com/klen/python-mode.git
