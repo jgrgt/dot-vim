@@ -19,3 +19,6 @@
 [submodule "bundle/slime"]
 	path = bundle/slime
 	url = git://github.com/jpalardy/vim-slime.git
+[submodule "bundle/gundo"]
+	path = bundle/gundo
+	url = git://github.com/sjl/gundo.vim.git
