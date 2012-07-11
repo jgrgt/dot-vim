@@ -1,4 +1,5 @@
-syntax on
+"Disable syntax on because it might mess with solarized
+"syntax on
 set ai
 set tabstop=4 expandtab shiftwidth=4 
 set iskeyword=@,48-57,_,192-255

@@ -15,6 +15,26 @@ if v:progname =~? "evim"
 endif
 
 " Pathogen initialization
+
+let g:pathogen_disabled = []
+"call add(g:pathogen_disabled, 'ack')
+"call add(g:pathogen_disabled, 'ctrlp')
+"call add(g:pathogen_disabled, 'gundo')
+"call add(g:pathogen_disabled, 'linediff')
+"call add(g:pathogen_disabled, 'powerline')
+"call add(g:pathogen_disabled, 'python-mode')
+"call add(g:pathogen_disabled, 'slime')
+"call add(g:pathogen_disabled, 'snipmate')
+"call add(g:pathogen_disabled, 'sparkup')
+"call add(g:pathogen_disabled, 'splice')
+"call add(g:pathogen_disabled, 'syntastic')
+"call add(g:pathogen_disabled, 'vim-colors-solarized')
+"call add(g:pathogen_disabled, 'vim-javascript')
+"call add(g:pathogen_disabled, 'vim-makegreen')
+"call add(g:pathogen_disabled, 'vim-nosecompiler')
+"call add(g:pathogen_disabled, 'vim-smartinput')
+"call add(g:pathogen_disabled, 'vim-surround')
+
 call pathogen#infect()
 se t_Co=256
 
@@ -52,14 +72,13 @@ if has("gui_running")
   set hlsearch
   " Solarized http://ethanschoonover.com/solarized/vim-colors-solarized
   set background=light
-  " let g:solarized_termcolors=16
   colorscheme solarized
 else
   syntax on
   set hlsearch
   " Solarized http://ethanschoonover.com/solarized/vim-colors-solarized
-  set background=dark
   let g:solarized_termcolors=256
+  set background=dark
   colorscheme solarized
 endif
 
