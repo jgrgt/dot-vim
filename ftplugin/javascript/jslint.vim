@@ -132,7 +132,7 @@ function! s:JSLint()
     return
   endif
 
-  highlight link JSLintError SpellBad
+  highlight link JSLintError Error
 
   if exists("b:cleared")
     if b:cleared == 0
