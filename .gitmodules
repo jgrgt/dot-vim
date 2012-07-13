@@ -64,3 +64,6 @@
 [submodule "bundle/snipmate-snippets"]
 	path = bundle/snipmate-snippets
 	url = git://github.com/honza/snipmate-snippets.git
+[submodule "bundle/koevim"]
+	path = bundle/koevim
+	url = git://github.com/RealNitro/koevim.git
