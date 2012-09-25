@@ -67,3 +67,6 @@
 [submodule "bundle/koevim"]
 	path = bundle/koevim
 	url = git://github.com/RealNitro/koevim.git
+[submodule "bundle/puppet"]
+	path = bundle/puppet
+	url = git://github.com/rodjek/vim-puppet.git
