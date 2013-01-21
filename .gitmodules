@@ -73,3 +73,6 @@
 [submodule "bundle/plantuml-syntax"]
 	path = bundle/plantuml-syntax
 	url = git://github.com/aklt/plantuml-syntax.git
+[submodule "bundle/openobject-vim"]
+	path = bundle/openobject-vim
+	url = git@github.com:RealNitro/openobject-vim.git
