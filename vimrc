@@ -127,11 +127,6 @@ autocmd BufRead,BufNewFile *.pl syntax on
 autocmd BufRead,BufNewFile *.pl set ai
 autocmd BufRead,BufNewFile *.pl set tabstop=4 expandtab shiftwidth=4
 
-autocmd BufNewFile,BufRead *.yaml,*.yml syntax on
-autocmd BufNewFile,BufRead *.yaml,*.yml set ai
-autocmd BufNewFile,BufRead *.yaml,*.yml set tabstop=2 expandtab shiftwidth=2
-autocmd BufNewFile,BufRead *.yaml,*.yml so ~/.vim/syntax/yaml.vim
-
 " from http://blog.sontek.net/2008/05/11/python-with-a-modular-ide-vim/
 "autocmd FileType python set omnifunc=pythoncomplete#Complete
 "autocmd FileType python setlocal omnifunc=pysmell#Complete
